@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MVC_Homework.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,10 +9,12 @@ namespace MVC_Homework.Controllers
 {
     public class 客戶銀行資訊Controller : Controller
     {
+        DBModel db = new DBModel();
+
         // GET: 客戶銀行資訊
         public ActionResult Index()
         {
-            return View();
+            return View(db.客戶銀行資訊.ToList());
         }
 
         // GET: 客戶銀行資訊/Details/5
@@ -23,16 +26,19 @@ namespace MVC_Homework.Controllers
         // GET: 客戶銀行資訊/Create
         public ActionResult Create()
         {
+            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱");
             return View();
         }
 
         // POST: 客戶銀行資訊/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(客戶銀行資訊 cb)
         {
             try
             {
-                // TODO: Add insert logic here
+                cb.Flag = true;
+                db.客戶銀行資訊.Add(cb);
+                db.SaveChanges();
 
                 return RedirectToAction("Index");
             }

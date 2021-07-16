@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Runtime.Remoting.Contexts;
 using System.Web;
 using System.Web.Mvc;
 
@@ -14,9 +15,22 @@ namespace MVC_Homework.Controllers
         DBModel db = new DBModel();
 
         // GET: ClientData
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string keyword)
         {
-            return View(db.客戶資料.ToList());
+            ViewBag.CurrentFilter = keyword;
+
+            var filter = db.客戶資料.Where(p => p.Flag == true);
+
+            if (!String.IsNullOrEmpty(keyword))
+            {
+                 filter = filter.Where(s => s.客戶名稱.Contains(keyword));
+            }
+            if (!String.IsNullOrEmpty(sortOrder)) {
+                filter = filter.OrderByDescending(s => s.Id);
+            }
+         
+            return View(filter.ToList());
+
         }
 
         // GET: ClientData/Details/5
@@ -42,6 +56,7 @@ namespace MVC_Homework.Controllers
         {
             try
             {
+                cd.Flag = true;
                 db.客戶資料.Add(cd);
                 db.SaveChanges();
 
@@ -99,6 +114,7 @@ namespace MVC_Homework.Controllers
             {
                 客戶資料 cd = db.客戶資料.Find(id);
                 cd.Flag = false;
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             catch

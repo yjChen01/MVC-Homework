@@ -130,6 +130,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ClientDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\作業01清單Controller.cs" />
     <Compile Include="Controllers\客戶聯絡人Controller.cs" />
     <Compile Include="Controllers\客戶銀行資訊Controller.cs" />
     <Compile Include="Global.asax.cs">
@@ -151,7 +152,11 @@
       <DependentUpon>ClinetDataModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\PartialClassManager\客戶資料.Partial.cs" />
+    <Compile Include="Models\PartialClassManager\客戶銀行資訊.Parital.cs" />
     <Compile Include="Models\sysdiagrams.cs">
+      <DependentUpon>ClinetDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\作業檢視表01.cs">
       <DependentUpon>ClinetDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\客戶聯絡人.cs">
@@ -164,6 +169,7 @@
       <DependentUpon>ClinetDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValidationAttributes\PhoneNumberAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -228,10 +234,12 @@
     <Content Include="Views\客戶聯絡人\Index.cshtml" />
     <Content Include="Views\ClientData\Edit.cshtml" />
     <Content Include="Views\ClientData\Delete.cshtml" />
+    <Content Include="Views\客戶銀行資訊\Index.cshtml" />
+    <Content Include="Views\作業01清單\Index.cshtml" />
+    <Content Include="Views\客戶銀行資訊\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\客戶銀行資訊\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

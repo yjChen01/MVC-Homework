@@ -15,10 +15,10 @@ namespace MVC_Homework.Controllers
         private DBModel db = new DBModel();
 
         // GET: 客戶聯絡人
-        public ActionResult Index()
+        public ActionResult Index() //可是理論是上已經被隱藏的客戶不該在這裡被看到
         {
-            var 客戶聯絡人 = db.客戶聯絡人.Include(客 => 客.客戶資料);
-            return View(客戶聯絡人.ToList());
+            var filter = db.客戶聯絡人.Where(P => P.Flag == true);
+            return View(filter.ToList());
         }
 
         // GET: 客戶聯絡人/Details/5
@@ -48,17 +48,18 @@ namespace MVC_Homework.Controllers
         // 如需詳細資料，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,客戶Id,職稱,姓名,Email,手機,電話")] 客戶聯絡人 客戶聯絡人)
+        public ActionResult Create([Bind(Include = "Id,客戶Id,職稱,姓名,Email,手機,電話")] 客戶聯絡人 cl)
         {
             if (ModelState.IsValid)
             {
-                db.客戶聯絡人.Add(客戶聯絡人);
+                cl.Flag = true;
+                db.客戶聯絡人.Add(cl);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
-            return View(客戶聯絡人);
+            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", cl.客戶Id);
+            return View(cl);
         }
 
         // GET: 客戶聯絡人/Edit/5
@@ -82,27 +83,24 @@ namespace MVC_Homework.Controllers
         // 如需詳細資料，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(客戶聯絡人 客戶聯絡人)
+        public ActionResult Edit(客戶聯絡人 cl)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(客戶聯絡人).State = EntityState.Modified;
+                cl.Flag = true;
+                db.Entry(cl).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
-            return View(客戶聯絡人);
+            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", cl.客戶Id);
+            return View(cl);
         }
 
         // GET: 客戶聯絡人/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
-            if (客戶聯絡人 == null)
+            if (客戶聯絡人 == null && 客戶聯絡人.Flag==false)
             {
                 return HttpNotFound();
             }
@@ -110,12 +108,12 @@ namespace MVC_Homework.Controllers
         }
 
         // POST: 客戶聯絡人/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        [HttpPost]
+
+        public ActionResult Delete(int id, FormCollection collection)
         {
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
-            db.客戶聯絡人.Remove(客戶聯絡人);
+            客戶聯絡人 cl = db.客戶聯絡人.Find(id);
+            cl.Flag = false;
             db.SaveChanges();
             return RedirectToAction("Index");
         }

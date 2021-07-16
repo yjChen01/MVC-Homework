@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MVC_Homework.ValidationAttributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -26,10 +27,18 @@ namespace MVC_Homework.Models.PartialClassManager
 
         [Required]
         public string 客戶名稱 { get; set; }
+        
+        [Required]
         public string 統一編號 { get; set; }
+        
+        [Required,PhoneNumber]
         public string 電話 { get; set; }
+        
         public string 傳真 { get; set; }
+
         public string 地址 { get; set; }
+
+        [Required, EmailAddress(ErrorMessage ="請輸入正確的信箱格式")]
         public string Email { get; set; }
     }
 }
