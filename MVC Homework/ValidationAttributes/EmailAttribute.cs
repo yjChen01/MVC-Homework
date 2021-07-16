@@ -6,11 +6,11 @@ using System.Web;
 
 namespace MVC_Homework.ValidationAttributes
 {
-    public class PhoneNumberAttribute:RegularExpressionAttribute
+    public class EmailAttribute : DataTypeAttribute
     {
-        public PhoneNumberAttribute() : base(@"\d{4}-\d{6}")
+        public EmailAttribute():base(@"^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")
         {
-            base.ErrorMessage = "請輸入合法的手機號碼YA";
+            base.ErrorMessage = "Email格式有誤";
         }
     }
 }

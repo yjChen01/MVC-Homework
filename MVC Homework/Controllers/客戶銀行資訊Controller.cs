@@ -1,6 +1,7 @@
 ﻿using MVC_Homework.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -14,13 +15,19 @@ namespace MVC_Homework.Controllers
         // GET: 客戶銀行資訊
         public ActionResult Index()
         {
-            return View(db.客戶銀行資訊.ToList());
+            var filter = db.客戶銀行資訊.Where(p => p.Flag == true);
+            return View(filter.ToList());
         }
-
+        
         // GET: 客戶銀行資訊/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            客戶銀行資訊 cb = db.客戶銀行資訊.Find(id);
+            if (cb == null)
+            {
+                return HttpNotFound();
+            }
+            return View(cb);
         }
 
         // GET: 客戶銀行資訊/Create
@@ -39,7 +46,6 @@ namespace MVC_Homework.Controllers
                 cb.Flag = true;
                 db.客戶銀行資訊.Add(cb);
                 db.SaveChanges();
-
                 return RedirectToAction("Index");
             }
             catch
@@ -51,45 +57,50 @@ namespace MVC_Homework.Controllers
         // GET: 客戶銀行資訊/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            客戶銀行資訊 cb = db.客戶銀行資訊.Find(id);
+            if (cb == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", cb.客戶Id);
+            return View(cb);
         }
 
         // POST: 客戶銀行資訊/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(客戶銀行資訊 cb)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-
+                cb.Flag = true;
+                db.Entry(cb).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", cb.客戶Id);
+            return View(cb);
         }
 
         // GET: 客戶銀行資訊/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            客戶銀行資訊 cb = db.客戶銀行資訊.Find(id);
+            if (cb == null && cb.Flag == false)
+            {
+                return HttpNotFound();
+            }
+            return View(cb);
         }
 
         // POST: 客戶銀行資訊/Delete/5
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            客戶銀行資訊 cb = db.客戶銀行資訊.Find(id);
+            cb.Flag = false;
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }

@@ -5,7 +5,15 @@
 }
 
 <h2>Index</h2>
+@using (Html.BeginForm())
+{
+    <p>
+        請搜尋客戶名稱:
+        @Html.TextBox("keyword")
 
+        <input type="submit" value="Search" />
+    </p>
+}
 
 <table class="table">
     <tr>
@@ -21,18 +29,19 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-<tr>
-    <th>
-        @Html.DisplayFor(modelItem => item.客戶名稱)
-    </th>
-    <td>
-        @Html.DisplayFor(modelItem => item.聯絡人數量)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.銀行帳戶數量)
-    </td>
-</tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <th>
+                @Html.DisplayFor(modelItem => item.客戶名稱)
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.聯絡人數量)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.銀行帳戶數量)
+            </td>
+        </tr>
+    }
 
 </table>

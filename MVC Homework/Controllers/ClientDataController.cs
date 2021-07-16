@@ -17,18 +17,69 @@ namespace MVC_Homework.Controllers
         // GET: ClientData
         public ActionResult Index(string sortOrder, string keyword)
         {
-            ViewBag.CurrentFilter = keyword;
+        
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";//客戶名稱
+            ViewBag.TaxParm = sortOrder=="tax" ? "tax_desc" : "tax";//統一編號
+            ViewBag.PhonParm = sortOrder=="phon" ? "phon_d" : "phon";
+            ViewBag.faxParm = sortOrder == "fax" ? "fax_desc" : "fax";
+            ViewBag.addrParm = sortOrder == "addr" ? "addr_desc" : "addr";
+            ViewBag.EmailParm = sortOrder == "mail" ? "mail_desc" : "mail";
 
             var filter = db.客戶資料.Where(p => p.Flag == true);
 
             if (!String.IsNullOrEmpty(keyword))
             {
                  filter = filter.Where(s => s.客戶名稱.Contains(keyword));
+                ViewBag.SearchParm = keyword;
             }
-            if (!String.IsNullOrEmpty(sortOrder)) {
-                filter = filter.OrderByDescending(s => s.Id);
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    filter = filter.OrderByDescending(s => s.客戶名稱);
+                    break;
+
+                case "tax_desc":
+                    filter = filter.OrderByDescending(s => s.統一編號);
+                    break;
+                case "tax":
+                    filter = filter.OrderBy(s => s.統一編號);
+                    break;
+
+                case "phon_d":
+                    filter = filter.OrderByDescending(s => s.電話);
+                    break;
+                case "phon":
+                    filter = filter.OrderBy(s => s.電話);
+                    break;
+
+                case "fax_desc":
+                    filter = filter.OrderByDescending(s => s.傳真);
+                    break;
+                case "fax":
+                    filter = filter.OrderBy(s => s.傳真);
+                    break;
+
+                case "addr_desc":
+                    filter = filter.OrderByDescending(s => s.地址);
+                    break;
+                case "addr":
+                    filter = filter.OrderBy(s => s.地址);
+                    break;
+
+                case "mail_desc":
+                    filter = filter.OrderByDescending(s => s.Email);
+                    break;
+                case "mail":
+                    filter = filter.OrderBy(s => s.Email);
+                    break;
+
+
+                default:
+                      filter = filter.OrderBy(s => s.客戶名稱);
+                    break;
             }
-         
+
             return View(filter.ToList());
 
         }
@@ -87,6 +138,7 @@ namespace MVC_Homework.Controllers
                 // TODO: Add update logic here
                 if (ModelState.IsValid)
                 {
+                    cd.Flag = true;
                     db.Entry(cd).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");//儲存後重新導向回index並用View印出新傳入的資料

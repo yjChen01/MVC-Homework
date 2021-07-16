@@ -15,9 +15,70 @@ namespace MVC_Homework.Controllers
         private DBModel db = new DBModel();
 
         // GET: 客戶聯絡人
-        public ActionResult Index() //可是理論是上已經被隱藏的客戶不該在這裡被看到
+        public ActionResult Index(string sortOrder) //可是理論是上已經被隱藏的客戶不該在這裡被看到
         {
+            ViewBag.jnameParm = sortOrder == "jname" ? "jname_desc" : "jname";
+            ViewBag.nameParm = sortOrder == "name" ? "name_desc" : "name";
+            ViewBag.EmailParm = sortOrder == "Email" ? "Email_desc" : "Email";
+            ViewBag.PhoneParm = sortOrder == "Phone" ? "Phone_desc" : "Phone";
+            ViewBag.homePParm = sortOrder == "homeP" ? "homeP_desc" : "homeP";
+            ViewBag.CompanyParm = sortOrder == "Company" ? "Company_desc" : "Company";
+
             var filter = db.客戶聯絡人.Where(P => P.Flag == true);
+            
+            //if (!String.IsNullOrEmpty(keyword))
+            //{
+            //    filter = filter.Where(s => s.客戶聯絡人.Contains(keyword));
+            //    ViewBag.SearchParm = keyword;
+            //}
+
+
+            switch (sortOrder)
+            {
+                case "jname":
+                    filter = filter.OrderBy(p=>p.職稱);
+                    break;
+                case "jname_desc":
+                    filter = filter.OrderByDescending(p => p.職稱);
+                    break;
+
+                case "name":
+                    filter = filter.OrderBy(p => p.姓名);
+                    break;
+                case "name_desc":
+                    filter = filter.OrderByDescending(p => p.姓名);
+                    break;
+
+                case "Email":
+                    filter = filter.OrderBy(p => p.Email);
+                    break;
+                case "Email_desc":
+                    filter = filter.OrderByDescending(p => p.Email);
+                    break;
+
+                case "Phone":
+                    filter = filter.OrderBy(p => p.手機);
+                    break;
+                case "Phone_desc":
+                    filter = filter.OrderByDescending(p => p.手機);
+                    break;
+
+                case "homeP":
+                    filter = filter.OrderBy(p => p.電話);
+                    break;
+                case "homeP_desc":
+                    filter = filter.OrderByDescending(p => p.電話);
+                    break;
+
+                case "Company":
+                    //無法獲取名稱資料
+                    break;
+                case "Company_desc":
+                    //
+                    break;
+
+            }
+
             return View(filter.ToList());
         }
 
