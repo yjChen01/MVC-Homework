@@ -6,13 +6,10 @@ using System.Web;
 
 namespace MVC_Homework.Models
 {
-    //public partial class 客戶銀行資訊 : IValidatableObject
-    //{
-    //    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
+    [MetadataType(typeof(客戶銀行資訊MetaData))]
+    public partial class 客戶銀行資訊
+    {
+    }
     public partial class 客戶銀行資訊MetaData
     {
         public int Id { get; set; }

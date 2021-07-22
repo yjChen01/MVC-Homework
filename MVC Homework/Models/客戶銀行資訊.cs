@@ -11,10 +11,7 @@ namespace MVC_Homework.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
-    [MetadataType(typeof(客戶銀行資訊MetaData))]
-
+    
     public partial class 客戶銀行資訊
     {
         public int Id { get; set; }

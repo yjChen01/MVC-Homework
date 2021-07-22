@@ -7,7 +7,7 @@ using System.Web;
 
 namespace MVC_Homework.Models
 {
-    
+    [MetadataType(typeof(客戶聯絡人MetaData))]
     public partial class 客戶聯絡人: IValidatableObject
     {
        DBModel db = new DBModel();
