@@ -1,21 +1,25 @@
-﻿@model MVC_Homework.Models.AccountDateManager
+﻿@model IEnumerable<MVC_Homework.Models.Accounts>
+
+@using X.PagedList;
+@using X.PagedList.Mvc;
 
 @{
     ViewBag.Title = "Index";
 }
-
 <h2>Index</h2>
 @using (Html.BeginForm())
 {
 <p style="text-align:right">
-    起始日期：
-    @Html.TextBoxFor(model => model.StartDate, new { type = "date" })
+    @*起始日期：
+    @Html.TextBoxFor(model => model.StartDay, new { type = "date" })
     結束日期：
-    @Html.TextBoxFor(model => model.EndDate, new { @value=Model.EndDate ,type = "date" })
-    <input type="submit" title="送出查詢" />
+    @Html.TextBoxFor(model => model.EndDate, new { type = "date", @Value = Model.EndDate })
+    @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })*@
+
+    <input type="submit" Value="送出查詢" />
+    @Html.PagedListPager(Model as IPagedList, (p) => Url.Action("Index", new { pageNo = p }))
 </p>
 }
-<CalendarDatePicker x:Name="arrivalCalendarDatePicker" Header="Calendar" />
 <table class="table">
     <tr>
         <th>
@@ -30,7 +34,7 @@
         <th></th>
     </tr>
 
-    @foreach (var item in Model.Accounts)
+    @foreach (var item in Model)
     {
         <tr>
             <td>

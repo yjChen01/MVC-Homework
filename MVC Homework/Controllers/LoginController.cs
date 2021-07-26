@@ -7,30 +7,47 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Windows.UI.Xaml.Controls;
+using X.PagedList;
 
 namespace MVC_Homework.Controllers
 {
     public class LoginController : Controller
     {
         repoAccountTest repo = new repoAccountTest();
+        public DateTime ed;
 
         // GET: Login
-        public ActionResult Index(AccountDateManager data)
+        public ActionResult Index(AccountDateManager data, int pageNo = 1, int pageSize = 3)
         {
             AccountDateManager retData = new AccountDateManager();
-            if (data.StartDate != DateTime.MinValue)
+
+            if (ModelState.IsValid)
             {
-                if(data.EndDate == DateTime.MinValue)
+                DateTime st = DateTime.Parse(data.StartDate);
+                if (String.IsNullOrEmpty(data.EndDate)) //給model餵end day時間
                 {
-                    data.EndDate = data.StartDate.AddDays(7);
+                    ed = st.AddDays(7);
                 }
-                retData.Accounts = repo.GetAll().Where(s => s.Registered >= data.StartDate && s.Registered<=data.EndDate);
+                else
+                {
+                    ed = DateTime.Parse(data.EndDate);
+                }
+
+                if (st != DateTime.MinValue)
+                {
+                    retData.Accounts = repo.GetAll().Where(s => s.Registered >= st && s.Registered <= ed).OrderBy(p => p.Registered).ToPagedList(pageNo, pageSize);
+                    retData.EndDate = ed.ToString("yyyy-MM-dd");
+                }
+                else
+                {
+                    retData.Accounts = repo.GetAll().OrderBy(p => p.Registered).ToPagedList(pageNo, pageSize);
+                }
             }
             else
             {
-                retData.Accounts = repo.GetAll();
+                retData.Accounts = repo.GetAll().OrderBy(p => p.Registered).ToPagedList(pageNo, pageSize);
             }
-            return View(retData);
+            return View(retData.Accounts);
         }
     }
 }

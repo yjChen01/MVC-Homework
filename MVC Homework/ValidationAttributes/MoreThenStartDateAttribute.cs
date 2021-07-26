@@ -12,10 +12,10 @@ namespace MVC_Homework.ValidationAttributes
         AccountDateManager aa = new AccountDateManager();
         public DateTime start { get; set; }
         public DateTime end { get; set; }
-        public MoreThenStartDateAttribute(DateTime st,DateTime ed)
+        public MoreThenStartDateAttribute(string st,string ed)
         {
-            this.start = st;
-            this.end = ed;
+           this.start = DateTime.Parse(st);
+           this.end = DateTime.Parse(ed);
         }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
