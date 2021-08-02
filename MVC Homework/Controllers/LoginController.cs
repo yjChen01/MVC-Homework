@@ -47,7 +47,7 @@ namespace MVC_Homework.Controllers
             {
                 retData.Accounts = repo.GetAll().OrderBy(p => p.Registered).ToPagedList(pageNo, pageSize);
             }
-            return View(retData.Accounts);
+            return View(retData);
         }
     }
 }

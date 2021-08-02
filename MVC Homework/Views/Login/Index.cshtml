@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MVC_Homework.Models.Accounts>
+﻿@model MVC_Homework.Models.AccountDateManager
 
 @using X.PagedList;
 @using X.PagedList.Mvc;
@@ -10,14 +10,14 @@
 @using (Html.BeginForm())
 {
 <p style="text-align:right">
-    @*起始日期：
-    @Html.TextBoxFor(model => model.StartDay, new { type = "date" })
+    起始日期：
+    @Html.TextBoxFor(model => model.StartDate, new { type = "date" })
     結束日期：
     @Html.TextBoxFor(model => model.EndDate, new { type = "date", @Value = Model.EndDate })
-    @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })*@
-
+    @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })
     <input type="submit" Value="送出查詢" />
-    @Html.PagedListPager(Model as IPagedList, (p) => Url.Action("Index", new { pageNo = p }))
+
+    @Html.PagedListPager(Model.Accounts as IPagedList, (p) => Url.Action("Index", new { pageNo = p }))
 </p>
 }
 <table class="table">
@@ -34,11 +34,12 @@
         <th></th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.Accounts)
     {
+       
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Registered)
+                 @Html.DisplayFor(modelItem => item.Registered)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
